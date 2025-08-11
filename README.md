@@ -87,7 +87,8 @@ Sim. settings:
 
 $$K(x,y) = \exp(-\gamma||x-y||^2)=\exp(-||x-y||^2/(2\sigma^2))$$
 
-Conclusion: We need to further investigate how to find optimal $\gamma_{rbf}$. It can be done either on a grid based on plug-in/explicit estimators; or on a grid based on a formula for the asymtotic variance for Gaussian distributions (it needs pi_target, mu+, mu-, Sigma+, Sigma- estimators); or by numerically finding a minimum of a formula for the asymtotic variance for Gaussian distributions (it still needs pi_target, mu+, mu-, Sigma+, Sigma- estimators and there is a question how to estimate pi_target (gamma?))
+Conclusion: We need to further investigate how to find optimal $\gamma_{rbf}$. It can be done either on a grid based on plug-in/explicit estimators; or on a grid based on a formula for the asymtotic variance for Gaussian distributions (it needs pi_target, mu+, mu-, Sigma+, Sigma- estimators); or by numerically finding a minimum of a formula for the asymtotic variance for Gaussian distributions (it still needs pi_target, mu+, mu-, Sigma+, Sigma- estimators and there is a question how to estimate pi_target how to select gamma to estimate pi_target?))
+
 Figure below:
 
 - Sim. settings
@@ -105,6 +106,7 @@ More similar results: `03_simulations_gamma.ipynb`
 ![](results/03_simulations_n500_pi_target_03.png)
 
 Figure below shows how $\hat \pi$'s change with changing $\gamma_{rbf}$ - U estimators seem quite stable. Here the rule of thumb value for $\gamma_{rbf}$ is $0.2$ (one over the number of features).
+
 <img src="results/01_simulation_gamma.png" width="500">
 
 # Confidence intervals
@@ -112,6 +114,8 @@ Figure below shows how $\hat \pi$'s change with changing $\gamma_{rbf}$ - U esti
 Here is a proposal on how to visualise and compare CI for various estimators.
 
 The first plot shows 100 CI for a fixed simulation params (the only param that's changing is pi_target). Red are the ones that do not cover the true value. In the second plot for each value on x-axis we sum the number of CI that the given point belongs to: we want to see value ~0.95 where the vertical line is, and steep slopes (as then the CIs are narrrow).
+
+More in:`04_simulation_CI.ipynb`
 
 ![](results/04_simulations_ci.png)
 
