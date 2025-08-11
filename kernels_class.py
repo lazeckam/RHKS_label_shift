@@ -35,7 +35,6 @@ def E_K_X1_Y1_K_X1_Y2(K_X_Y):
     return sum_X1/(n_X*n_Y*(n_Y-1))
 
 def E_K_X1_Y1_K_X1_Z1(K_X_Y, K_X_Z):
-    #check
 
     n_X = K_X_Y.shape[0]
     n_Y = K_X_Y.shape[1]
