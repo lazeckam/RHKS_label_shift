@@ -1,0 +1,26 @@
+{
+    "id": "F12611B3",
+    "path": "D:/projekty/immucan_factm_mofa/fitted_mofa/read_mofa.R",
+    "project_path": null,
+    "type": "r_source",
+    "hash": "127395625",
+    "contents": "",
+    "dirty": false,
+    "created": 1754320742312.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "109,20",
+        "scrollLine": "102"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1754476483,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1754476483683,
+    "read_only": false,
+    "read_only_alternatives": []
+}

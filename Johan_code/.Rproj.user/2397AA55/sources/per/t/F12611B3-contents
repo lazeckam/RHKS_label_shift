@@ -1,0 +1,126 @@
+setwd('D://projekty//immucan_factm_mofa//fitted_mofa')
+# BiocManager::install("MOFA2")
+library('MOFA2')
+
+mofa <- readRDS("mofa_V6_minor.rds")
+mofa_imputed <- impute(mofa)
+
+names_mofa <- c('Cellohood', 'Densities', "RNA",'Expressions', 'Interactions', 'BINARY')
+names_factm <- c('cellohood', 'densities', "rna",'expressions', 'interactions', 'binary')
+
+
+for(i in 1:6){
+  print(names_mofa[i])
+  view <- t(get_data(mofa, views=names_mofa[i])[[names_mofa[i]]][['group1']])
+  write.table(view, paste0('view_',names_factm[i],'.txt'))
+  weights <- get_weights(mofa, views=names_mofa[i])
+  write.table(weights, paste0('weights_',names_factm[i],'.txt'))
+  if(i!=6){
+    view_imputed <- t(get_imputed_data(mofa_imputed, views=names_mofa[i])[[names_mofa[i]]][['group1']])
+    write.table(view_imputed, paste0('view_',names_factm[i],'_imputed.txt'))
+  }
+}
+
+factors <- get_factors(mofa)[['group1']]
+write.table(factors, paste0('factors.txt'))
+
+
+plot(mofa@training_stats$elbo[5:178])
+
+
+
+view_cellohood <- t(get_data(mofa, views='Cellohood')[["Cellohood"]][['group1']])
+write.table(view_cellohood, 'view_cellohood.txt')
+view_cellohood <- t(get_weights(mofa, views='Cellohood')[["Cellohood"]][['group1']])
+write.table(view_cellohood, 'view_cellohood.txt')
+view_cellohood <- t(get_imputed_data(mofa_imputed, views='Cellohood')[["Cellohood"]][['group1']])
+write.table(view_cellohood, 'view_cellohood_imputed.txt')
+
+view_densities <- t(get_data(mofa, views='Densities')[["Densities"]][['group1']])
+write.table(view_densities, 'view_densities.txt')
+view_densities <- t(get_imputed_data(mofa_imputed, views='Densities')[["Densities"]][['group1']])
+write.table(view_densities, 'view_densities_imputed.txt')
+
+view_rna <- t(get_data(mofa, views='RNA')[["RNA"]][['group1']])
+write.table(view_rna, 'view_rna.txt')
+view_rna <- t(get_imputed_data(mofa_imputed, views='RNA')[["RNA"]][['group1']])
+write.table(view_rna, 'view_rna_imputed.txt')
+
+view_expressions <- t(get_data(mofa, views='Expressions')[["Expressions"]][['group1']])
+write.table(view_expressions, 'view_expressions.txt')
+view_expressions <- t(get_imputed_data(mofa_imputed, views='Expressions')[["Expressions"]][['group1']])
+write.table(view_expressions, 'view_expressions_imputed.txt')
+
+view_interactions <- t(get_data(mofa, views='Interactions')[["Interactions"]][['group1']])
+write.table(view_interactions, 'view_interactions.txt')
+view_interactions <- t(get_imputed_data(mofa_imputed, views='Interactions')[["Interactions"]][['group1']])
+write.table(view_interactions, 'view_interactions_imputed.txt')
+
+view_binary <- t(get_data(mofa, views='BINARY')[["BINARY"]][['group1']])
+write.table(view_binary, 'view_binary.txt')
+view_binary <-t(get_imputed_data(mofa_imputed, views='BINARY')[["BINARY"]][['group1']])
+write.table(view_binary, 'view_binary_imputed.txt')
+
+dim(view_rna)
+colnames(view_cellohood)
+
+colnames(view_densities)
+
+colnames(view_expressions)
+
+colnames(view_binary)
+
+mofa<- readRDS("mofa_V6_minor.rds")
+view_cellohood <- t(get_data(mofa, views='Cellohood')[["Cellohood"]][['group1']])
+which(apply(view_cellohood, 1, function(x) sum(is.na(x)))>0)
+view_cellohood[74,]
+mofa_2 <- impute(mofa, views='all')
+view_cellohood <- t(get_imputed_data(mofa_2, views='Cellohood')[["Cellohood"]][['group1']])
+view_cellohood[74,]
+
+
+view_densities <- t(get_data(mofa, views='Densities')[["Densities"]][['group1']])
+impute(mofa, views='Densities')
+
+
+view_densities[64,]
+
+get_variance_explained(mofa)
+
+get_default_model_options(mofa)
+get_expectations(mofa, "Z")
+
+get_default_training_options(mofa)
+
+mofa@expectations
+mofa@model_options
+mofa@training_options
+mofa@dimensions
+mofa@training_stats
+model@data_options
+model@dim_red
+model@status
+model@features_metadata
+model@stochastic_options
+model@data_options
+
+mofa@covariates
+mofa@covariates_warped
+mofa@intercepts$Cellohood
+mofa@mefisto_options
+mofa@dimensions
+mofa@on_disk
+
+
+get_elbo(mofa)
+
+compare_factors(list(mofa, mofa))
+
+mofa@intercepts
+mofa@samples_metadata
+mofa@features_metadata
+mofa@model_options
+mofa@dimensions
+mofa@status
+mofa@dim_red
+mofa@training_options
