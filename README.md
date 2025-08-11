@@ -105,8 +105,7 @@ More similar results: `03_simulations_gamma.ipynb`
 ![](results/03_simulations_n500_pi_target_03.png)
 
 Figure below shows how $\hat \pi$'s change with changing $\gamma_{rbf}$ - U estimators seem quite stable. Here the rule of thumb value for $\gamma_{rbf}$ is $0.2$ (one over the number of features).
-
-![](results/01_simulation_gamma.png)
+<img src="results/01_simulation_gamma.png" width="500">
 
 # Confidence intervals
 
