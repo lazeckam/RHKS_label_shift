@@ -8,10 +8,10 @@ import pandas as pd
 
 robjects.r['source']('../ratio_estimator/ratio/auxs_funcs.R')  
 
-class estimator_Vaz():
+class estimator_AC_Vaz():
 
     def __init__(self, 
-                 X_target, X_source_positive, X_source_negative):
+                 X_target, X_source_positive, X_source_negative, g):
         
         # self.X_target = X_target
         # self.X_source_positive = X_source_positive
@@ -37,17 +37,25 @@ class estimator_Vaz():
         # df_y_source = pd.DataFrame({'response': Y_source})
         self.Y_source = Y_source
 
+        if g == 'g.bella.random':
+            self.g = 'g.bella.random'
+            self.classifier = 'randomForest'
+        if g == 'g.forman.random':
+            self.g = 'g.forman.random'
+            self.classifier = 'randomForest'
+
     def run_g_kernel_leave(self):
 
-        g_list = robjects.ListVector({
-            'Vaz': robjects.ListVector({
-                'func':  robjects.r['g.kernel.leave'], 
-                'extra': robjects.ListVector({
-                    'lambda': robjects.FloatVector([0.001]),
-                    'kernel': robjects.r['gaussian.kernel']
+        if self.classifier == 'randomForest':
+
+            g_list = robjects.ListVector({
+                'Vaz': robjects.ListVector({
+                    'func':  robjects.r[self.g], 
+                    'extra': robjects.ListVector({
+                        'n.tree': 100
+                })
+                })
             })
-            })
-        })
 
         quantification_prior_shift = robjects.globalenv['quantification.prior.shift']
 
