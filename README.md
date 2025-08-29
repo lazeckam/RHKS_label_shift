@@ -119,4 +119,4 @@ More in:`04_simulation_CI.ipynb`
 
 ![](results/04_simulations_ci.png)
 
-![](results/04_simulations_ci_summary.png)
+![](results/04_simulations_ci_summary.png)twierdzenie 

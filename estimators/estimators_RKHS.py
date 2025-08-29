@@ -1,7 +1,28 @@
+"""
+=========================================================
+Estimation of Prior Probability and Asymptotic Variance of 
+Estimators under Prior Probability Shift using RKHS
+=========================================================
+
+This script provides tools to compute two estimators 
+('ipr' and 'nrm') of and their variances defined in the article.
+
+Structure:
+    1. Imports
+    2. Helper functions
+    3. Estimator class
+"""
+
+
+# =========================================================
+# 1. Imports
+# =========================================================
 import numpy as np
-from scipy.spatial.distance import cdist
 from sklearn.metrics.pairwise import pairwise_kernels
 
+# ============================================================
+# 2. Helper Functions
+# ============================================================
 def U_X_X(K_X_X):
     return (np.sum(K_X_X) - np.sum(np.diag(K_X_X)))/(K_X_X.shape[0]*(K_X_X.shape[0] - 1))
 
@@ -62,6 +83,9 @@ def E_K_X1_X2_K_X1_Y1(K_X_X, K_X_Y):
 
     return sum_X1/(n_X*n_Y*(n_X-1))
 
+# ============================================================
+# 3. Estimator Class
+# ============================================================
 class estimator_RHKS():
 
     def __init__(self, 
@@ -205,11 +229,13 @@ class estimator_RHKS():
 
         if not self._is_lambda_computed:
             self.compute_lambdas()
+        self.compute_tau_plug_in()
 
         nominator = self.lambda_target*self.tau_target_plug_in + self.lambda_source_positive*self.tau_positive_plug_in + self.lambda_source_negative*self.tau_negative_plug_in
         denominator = self.D_source_positive_source_negative**2
         
         self.var_plug_in = nominator/denominator
+        self.var_plug_in_n = (nominator/denominator)*self.r_n
 
     def compute_tau_explicit(self):
 
@@ -242,3 +268,11 @@ class estimator_RHKS():
         denominator = self.D_source_positive_source_negative**2
         
         self.var_explicit = nominator/denominator
+        self.var_explicit_n = (nominator/denominator)*self.r_n
+    
+    def compute_basic_simulations(self):
+        self.estimate_pi_nrm()
+        self.estimate_pi_ipr()
+        self.compute_K2()
+        self.compute_tau_plug_in()
+        self.estimate_variance_plug_in()

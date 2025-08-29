@@ -5,6 +5,9 @@ library('MOFA2')
 mofa <- readRDS("mofa_V6_minor.rds")
 mofa_imputed <- impute(mofa)
 
+sample_id <- colnames(get_data(mofa)$BINARY$group1)
+write.table(sample_id, paste0('sample_id.txt'))
+
 names_mofa <- c('Cellohood', 'Densities', "RNA",'Expressions', 'Interactions', 'BINARY')
 names_factm <- c('cellohood', 'densities', "rna",'expressions', 'interactions', 'binary')
 
