@@ -14,7 +14,7 @@ def set_params(sim_scenario, pi_target):
             },
             "n_target_seq": [100, 200, 300, 400, 500, 1000, 1500],
             "pi_target": pi_target,
-            "pi_target_name": str(pi_target*0).replace(".", ""),
+            "pi_target_name": str(pi_target).replace(".", ""),
             "n_plus": 150,
             "n_minus": 150
         }
@@ -29,7 +29,7 @@ def set_params(sim_scenario, pi_target):
             },
             "n_target_seq": [100, 200, 300, 400, 500, 1000, 1500],
             "pi_target": pi_target,
-            "pi_target_name": str(pi_target*0).replace(".", ""),
+            "pi_target_name": str(pi_target).replace(".", ""),
             "n_plus": 150,
             "n_minus": 150
         }
@@ -45,7 +45,7 @@ def set_params(sim_scenario, pi_target):
             },
             "n_target_seq": [100, 200, 300, 400, 500, 1000, 1500],
             "pi_target": pi_target,
-            "pi_target_name": str(pi_target*0).replace(".", ""),
+            "pi_target_name": str(pi_target).replace(".", ""),
             "n_plus": 150,
             "n_minus": 150
         }
