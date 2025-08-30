@@ -5,8 +5,11 @@ import sys
 sys.path.append("../estimators")
 from estimators_Vaz import *
 
-from params.sim_par_1 import *
-save_as = 'sim_par_1'
+from params.sim_par_n_target import *
+save_as = sys.argv[1]
+pi_target = float(sys.argv[2])
+params = set_params(save_as, pi_target)
+locals().update(params)
 
 iter = 0
 
@@ -33,7 +36,7 @@ for i in tqdm(range(N)):
         df_results.loc[iter, 'var_n'] = mod.var_Vaz_n
         df_results.loc[iter, 'var'] = mod.var_Vaz
 
-        df_results.to_csv("./results/"+save_as+"/Vaz_pi_target07.csv", index=False)
+        df_results.to_csv("./results/"+save_as+"/Vaz_pi_target"+pi_target_name+".csv", index=False)
 
         iter += 1
 

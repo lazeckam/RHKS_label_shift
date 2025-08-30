@@ -6,7 +6,7 @@ from rpy2.robjects.conversion import localconverter
 import numpy as np
 import pandas as pd
 
-robjects.r['source']('../ratio_estimator/ratio/auxs_funcs.R')  
+robjects.r['source']('../../ratio_estimator/ratio/auxs_funcs.R')  
 
 class estimator_AC_Vaz():
 
@@ -43,6 +43,12 @@ class estimator_AC_Vaz():
         if g == 'g.forman.random':
             self.g = 'g.forman.random'
             self.classifier = 'randomForest'
+        if g == 'g.bella.logistic':
+            self.g = 'g.bella.logistic'
+            self.classifier = 'logistic'
+        if g == 'g.forman.logistic':
+            self.g = 'g.logistic'
+            self.classifier = 'logistic'
 
     def run_g_kernel_leave(self):
 
@@ -51,8 +57,17 @@ class estimator_AC_Vaz():
             g_list = robjects.ListVector({
                 'Vaz': robjects.ListVector({
                     'func':  robjects.r[self.g], 
-                    'extra': robjects.ListVector({
+                    'extra': robjects.ListVector({ # effectively not used
                         'n.tree': 100
+                })
+                })
+            })
+        if self.classifier == 'logistic':
+
+            g_list = robjects.ListVector({
+                'Vaz': robjects.ListVector({
+                    'func':  robjects.r[self.g], 
+                    'extra': robjects.ListVector({ # effectively not used
                 })
                 })
             })

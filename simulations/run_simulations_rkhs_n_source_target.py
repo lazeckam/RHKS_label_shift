@@ -47,8 +47,8 @@ for i in tqdm(range(N)):
         df_results_ipr.loc[iter, 'var'] = mod.var_plug_in
         df_results_nrm.loc[iter, 'var'] =  mod.var_plug_in
 
-        df_results_ipr.to_csv("./results/"+save_as+"/ipr_pi_target07.csv", index=False)
-        df_results_nrm.to_csv("./results/"+save_as+"/nrm_pi_target07.csv", index=False)
+        df_results_ipr.to_csv("./results/"+save_as+"/ipr_pi_target"+pi_target_name+".csv", index=False)
+        df_results_nrm.to_csv("./results/"+save_as+"/nrm_pi_target"+pi_target_name+".csv", index=False)
 
         iter += 1
 

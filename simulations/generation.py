@@ -6,6 +6,8 @@ from copy import copy
 from varia.rbf_kernel import *
 from estimators.estimators_RKHS import *
 
+N_max = 5000
+
 
 def AR1(p, rho):
     """Generate AR(1) covariance matrix with parameter rho and size n x n."""
@@ -21,11 +23,11 @@ def generate_sample_normal_distribution_CC(mu_plus, Sigma_plus, mu_minus, Sigma_
     n_target_plus = np.random.binomial(n=n_target, p=pi_target)
     n_target_minus = n_target - n_target_plus
 
-    p_plus = np.random.multivariate_normal(mean=mu_plus, cov=Sigma_plus, size=n_plus)
-    p_minus = np.random.multivariate_normal(mean=mu_minus, cov=Sigma_minus, size=n_minus)
+    p_plus = np.random.multivariate_normal(mean=mu_plus, cov=Sigma_plus, size=N_max)[:n_plus,:]
+    p_minus = np.random.multivariate_normal(mean=mu_minus, cov=Sigma_minus, size=N_max)[:n_minus,:]
 
-    p_target_plus = np.random.multivariate_normal(mean=mu_plus, cov=Sigma_plus, size=n_target_plus)
-    p_target_minus = np.random.multivariate_normal(mean=mu_minus, cov=Sigma_minus, size=n_target_minus)
+    p_target_plus = np.random.multivariate_normal(mean=mu_plus, cov=Sigma_plus, size=N_max)[:n_target_plus,:]
+    p_target_minus = np.random.multivariate_normal(mean=mu_minus, cov=Sigma_minus, size=N_max)[:n_target_minus,:]
     p_target = np.vstack((p_target_plus, p_target_minus))
 
     return p_plus, p_minus, p_target
