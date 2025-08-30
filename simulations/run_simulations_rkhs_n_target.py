@@ -11,6 +11,8 @@ pi_target = float(sys.argv[2])
 params = set_params(save_as, pi_target)
 locals().update(params)
 
+print(pi_target_name)
+
 iter = 0
 
 df_results_ipr = pd.DataFrame(np.zeros((N*len(n_target_seq), 8)), 
