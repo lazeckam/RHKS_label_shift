@@ -6,7 +6,7 @@ from rpy2.robjects.conversion import localconverter
 import numpy as np
 import pandas as pd
 
-robjects.r['source']('../ratio_estimator/ratio/auxs_funcs.R')  
+robjects.r['source']('../../ratio_estimator/ratio/auxs_funcs.R')  
 
 class estimator_Vaz():
 

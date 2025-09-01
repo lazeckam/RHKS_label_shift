@@ -3,7 +3,7 @@ import scipy as scp
 import pandas as pd
 from tqdm import tqdm
 from copy import copy
-from varia.rbf_kernel import *
+from rbf_kernel import *
 from estimators.estimators_RKHS import *
 
 N_max = 5000

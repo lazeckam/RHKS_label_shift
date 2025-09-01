@@ -5,8 +5,12 @@ import sys
 sys.path.append("../estimators")
 from estimators_RKHS import *
 
-from params.sim_par_2 import *
-save_as = 'sim_par_2'
+from params.sim_par_n_target import *
+save_as = sys.argv[1]
+pi_target = float(sys.argv[2])
+params = set_params(save_as, pi_target)
+locals().update(params)
+
 
 iter = 0
 
