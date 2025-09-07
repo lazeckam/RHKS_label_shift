@@ -19,6 +19,7 @@ Structure:
 # =========================================================
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_kernels
+from scipy.optimize import minimize
 
 # ============================================================
 # 2. Helper Functions
@@ -276,3 +277,31 @@ class estimator_RHKS():
         self.compute_K2()
         self.compute_tau_plug_in()
         self.estimate_variance_plug_in()
+
+
+class estimator_RHKS_rbf_gamma(estimator_RHKS):
+    def __init__(self, X_target, X_source_positive, X_source_negative):
+        
+        self.X_target = X_target
+        self.X_source_positive = X_source_positive
+        self.X_source_negative = X_source_negative
+        self.p = X_target.shape[1]
+        
+        gamma_opt = self._get_gamma_muneric()
+        super().__init__(X_target, X_source_positive, X_source_negative, 
+                         UorV_statistic = 'U', kernel='rbf', kernel_params={'gamma': gamma_opt})
+
+    def _function_gamma(self, gamma):
+
+        mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, kernel_params={'gamma': gamma})
+
+        mod.estimate_pi_ipr()
+        mod.compute_K2()
+        mod.compute_tau_plug_in()
+        mod.estimate_variance_plug_in()
+
+        return mod.var_plug_in_n
+    
+    def _get_gamma_muneric(self):
+
+        return minimize(self._function_gamma, x0=1/self.p)['x'][0]

@@ -1,9 +1,9 @@
 import subprocess
 
-subprocess.Popen(["python", "run_simulations_AC_RF_n_target.py", "sim_par_1", '0.3'])
-subprocess.Popen(["python", "run_simulations_AC_RF_Vaz_n_target.py", "sim_par_1", '0.3'])
-subprocess.Popen(["python", "run_simulations_AC_logreg_Vaz_n_target.py", "sim_par_1", '0.3'])
-subprocess.Popen(["python", "run_simulations_AC_logreg_Vaz_n_target.py", "sim_par_1", '0.7'])
+# subprocess.Popen(["python", "run_simulations_AC_RF_n_target.py", "sim_par_1", '0.3'])
+# subprocess.Popen(["python", "run_simulations_AC_RF_Vaz_n_target.py", "sim_par_1", '0.3'])
+subprocess.Popen(["python", "run_simulations_AC_LR_Vaz_n_target.py", "sim_par_1", '0.7'])
+subprocess.Popen(["python", "run_simulations_AC_LR_n_target.py", "sim_par_1", '0.3'])
 
 # subprocess.Popen(["python", "run_simulations_AC_RF_n_target.py", "sim_par_1", '0.25'])
 # subprocess.Popen(["python", "run_simulations_AC_RF_n_target.py", "sim_par_1", '0.75'])
