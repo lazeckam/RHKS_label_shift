@@ -5,7 +5,7 @@
 * $\pi_{nrm}$ - the norm-based ratio estimator:
 $$\pi_{nrm} = \sqrt{\frac{\Delta_{P', P_{-}}}{\Delta_{P_{+}, P_{-}}}}$$
 - $\pi_{ipr}$ - the inner-product based projection estimator:
-$$\pi_{ipr} = \frac{\langle\Phi(P') - \Phi(P_{-}), \Phi(P_{+}) - \Phi(P_{-})\rangle}{||\Phi(P_{+}) - \Phi(P_{-})||^2}$$
+$$\pi_{ipr} = \frac{\langle\Phi(P') - \Phi(P_{-}), \Phi(P_{+}) - \Phi(P_{-})\rangle}{\|\Phi(P_{+}) - \Phi(P_{-})\|^2}$$
 - $\hat \pi_{nrm}$ - the norm-based ratio estimator; $\hat \pi_{ipr}$ - the inner-product based projection estimator; $\hat \pi$ - any of the above estimators
 - two versions: U and V for both $\hat \pi_{nrm}$ and $\hat \pi_{ipr}$
 ## Main asymptotics
@@ -119,4 +119,4 @@ More in:`04_simulation_CI.ipynb`
 
 ![](results/04_simulations_ci.png)
 
-![](results/04_simulations_ci_summary.png)twierdzenie 
+![](results/04_simulations_ci_summary.png)
