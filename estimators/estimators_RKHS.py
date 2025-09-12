@@ -20,6 +20,7 @@ Structure:
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_kernels
 from scipy.optimize import minimize
+from scipy.spatial.distance import pdist
 
 # ============================================================
 # 2. Helper Functions
@@ -280,16 +281,18 @@ class estimator_RHKS():
 
 
 class estimator_RHKS_rbf_gamma(estimator_RHKS):
-    def __init__(self, X_target, X_source_positive, X_source_negative):
+    def __init__(self, X_target, X_source_positive, X_source_negative, how='numerical'):
         
         self.X_target = X_target
         self.X_source_positive = X_source_positive
         self.X_source_negative = X_source_negative
         self.p = X_target.shape[1]
-        
-        gamma_opt = self._get_gamma_muneric()
+        if how == 'numerical':
+            self.gamma_opt = self._get_gamma_numerical()
+        if how == 'grid':
+            self.gamma_opt = self._get_gamma_grid()
         super().__init__(X_target, X_source_positive, X_source_negative, 
-                         UorV_statistic = 'U', kernel='rbf', kernel_params={'gamma': gamma_opt})
+                         UorV_statistic = 'U', kernel='rbf', kernel_params={'gamma': self.gamma_opt})
 
     def _function_gamma(self, gamma):
 
@@ -302,6 +305,21 @@ class estimator_RHKS_rbf_gamma(estimator_RHKS):
 
         return mod.var_plug_in_n
     
-    def _get_gamma_muneric(self):
+    def _get_gamma_numerical(self):
 
         return minimize(self._function_gamma, x0=1/self.p)['x'][0]
+    
+    def _get_gamma_grid(self):
+
+        p_source = np.vstack((self.X_source_positive, self.X_source_negative))
+
+        if p_source.shape[0] > 500:
+            p_source_ind = np.random.choice(np.arange(p_source.shape[0]), size=500, replace=False)
+            p_source = p_source[p_source_ind,:]
+        
+        dist2 = pdist(p_source)**2
+        gamma_seq = np.quantile(1/dist2, np.array([0.01,0.015,0.02,0.025,0.05,0.1,0.2,0.25,0.5,0.75,0.9,0.95,0.99]))
+
+        results_seq = np.array([self._function_gamma(gamma) for gamma in gamma_seq])
+
+        return gamma_seq[np.argmin(results_seq)]

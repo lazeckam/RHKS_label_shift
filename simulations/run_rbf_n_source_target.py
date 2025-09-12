@@ -24,7 +24,7 @@ for n_target in n_target_seq:
     df_results['n_plus'] = n_plus
     df_results['n_minus'] = n_minus
     r_n = 1/n_plus + 1/n_minus + 1/n_target
-    var = generate_sample_Nstd_Nstd_CC_rbf(p=gen_params['p'], beta=gen_params['beta'], n_plus=n_plus, n_minus=n_minus, 
+    var = generation_function_tmp_rbf(p=gen_params['p'], beta=gen_params['beta'], n_plus=n_plus, n_minus=n_minus, 
                                            n_target=n_target, pi_target=pi_target, gamma=1/gen_params['p'])[0]
     
 

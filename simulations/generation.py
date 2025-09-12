@@ -91,7 +91,27 @@ def generate_sample_Nstd_Nstd_CC_rbf(p, beta, n_plus, n_minus, n_target, pi_targ
     return variance_for_rbf(mu_plus, Sigma_plus, mu_minus, Sigma_minus, pi_target, 
                      lambda_target, lambda_plus, lambda_minus, gamma=gamma)
 
+def generate_sample_Nstd_AR1_CC_rbf(p, beta, rho,
+                                n_plus, n_minus, n_target, pi_target, gamma, seed=None):
+    p = int(p)
+    n_plus = int(n_plus)
+    n_minus = int(n_minus)
+    n_target = int(n_target)
+    
+    mu_plus = np.zeros(p)
+    Sigma_plus = np.eye(p)
+    mu_minus = beta*np.ones(p)
+    Sigma_minus = AR1(p, rho)
 
+    r_n = 1/n_target + 1/n_plus + 1/n_minus
+    r_n_inv = 1/r_n
+
+    lambda_target= r_n_inv/n_target
+    lambda_plus = r_n_inv/n_plus
+    lambda_minus = r_n_inv/n_minus
+
+    return variance_for_rbf(mu_plus, Sigma_plus, mu_minus, Sigma_minus, pi_target, 
+                     lambda_target, lambda_plus, lambda_minus, gamma=gamma)
 
 def simulation(df_params, generation_function, param_names,
                what_to_compute=None):

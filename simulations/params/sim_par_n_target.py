@@ -8,6 +8,7 @@ def set_params(sim_scenario, pi_target):
         params = {
             'N': 100,
             "generation_function_tmp": generate_sample_Nstd_Nstd_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_Nstd_CC_rbf,
             "gen_params": {
                 "p": 5,
                 "beta": 1
@@ -23,6 +24,7 @@ def set_params(sim_scenario, pi_target):
         params = {
             'N': 100,
             "generation_function_tmp": generate_sample_Nstd_Nstd_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_Nstd_CC_rbf,
             "gen_params": {
                 "p": 5,
                 "beta": 0.5
@@ -38,6 +40,7 @@ def set_params(sim_scenario, pi_target):
         params = {
             'N': 100,
             "generation_function_tmp": generate_sample_Nstd_AR1_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_AR1_CC_rbf,
             "gen_params": {
                 "p": 5,
                 "beta": 1,
