@@ -307,7 +307,8 @@ class estimator_RHKS_rbf_gamma(estimator_RHKS):
     
     def _get_gamma_numerical(self):
 
-        return minimize(self._function_gamma, x0=1/self.p)['x'][0]
+        return minimize(self._function_gamma, x0=1/self.p, bounds=[(1e-5,1)], 
+                        tol=1e-10)['x'][0]
     
     def _get_gamma_grid(self):
 

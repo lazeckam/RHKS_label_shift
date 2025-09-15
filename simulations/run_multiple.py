@@ -1,9 +1,42 @@
 import subprocess
 
+# subprocess.Popen(["python", "run_simulations_AC_LR_n_source.py", "sim_par_7", '0.25'])
+# subprocess.Popen(["python", "run_simulations_AC_LR_n_source.py", "sim_par_7", '0.75'])
+# subprocess.Popen(["python", "run_simulations_AC_LR_n_source.py", "sim_par_8", '0.25'])
+# subprocess.Popen(["python", "run_simulations_AC_LR_n_source.py", "sim_par_8", '0.75'])
+# subprocess.Popen(["python", "run_simulations_AC_LR_n_source.py", "sim_par_9", '0.25'])
+# subprocess.Popen(["python", "run_simulations_AC_LR_n_source.py", "sim_par_9", '0.75'])
+# print('Ac_lr ok')
+
+subprocess.Popen(["python", "run_simulations_rkhs_gamma_n_source.py", "sim_par_9", '0.25'])
+# subprocess.Popen(["python", "run_simulations_rkhs_gamma_n_source.py", "sim_par_7", '0.75'])
+# subprocess.Popen(["python", "run_simulations_rkhs_gamma_n_source.py", "sim_par_8", '0.25'])
+# subprocess.Popen(["python", "run_simulations_rkhs_gamma_n_source.py", "sim_par_8", '0.75'])
+# subprocess.Popen(["python", "run_simulations_rkhs_gamma_n_source.py", "sim_par_9", '0.25'])
+# subprocess.Popen(["python", "run_simulations_rkhs_gamma_n_source.py", "sim_par_9", '0.75'])
+print('rkhs gamma ok')
+
+# subprocess.Popen(["python", "run_simulations_AC_RF_n_source.py", "sim_par_7", '0.25'])
+# subprocess.Popen(["python", "run_simulations_AC_RF_n_source.py", "sim_par_7", '0.75'])
+# subprocess.Popen(["python", "run_simulations_AC_RF_n_source.py", "sim_par_8", '0.25'])
+# subprocess.Popen(["python", "run_simulations_AC_RF_n_source.py", "sim_par_8", '0.75'])
+# subprocess.Popen(["python", "run_simulations_AC_RF_n_source.py", "sim_par_9", '0.25'])
+# subprocess.Popen(["python", "run_simulations_AC_RF_n_source.py", "sim_par_9", '0.75'])
+# print('Ac_RF ok')
+
+
+# subprocess.Popen(["python", "run_simulations_Vaz_n_source.py", "sim_par_7", '0.25'])
+# subprocess.Popen(["python", "run_simulations_Vaz_n_source.py", "sim_par_7", '0.75'])
+# subprocess.Popen(["python", "run_simulations_Vaz_n_source.py", "sim_par_8", '0.25'])
+# subprocess.Popen(["python", "run_simulations_Vaz_n_source.py", "sim_par_8", '0.75'])
+# subprocess.Popen(["python", "run_simulations_Vaz_n_source.py", "sim_par_9", '0.25'])
+# subprocess.Popen(["python", "run_simulations_Vaz_n_source.py", "sim_par_9", '0.75'])
+# print('Vaz ok')
+
 # subprocess.Popen(["python", "run_simulations_AC_RF_n_target.py", "sim_par_1", '0.3'])
 # subprocess.Popen(["python", "run_simulations_AC_RF_Vaz_n_target.py", "sim_par_1", '0.3'])
-subprocess.Popen(["python", "run_simulations_AC_LR_Vaz_n_target.py", "sim_par_1", '0.7'])
-subprocess.Popen(["python", "run_simulations_AC_LR_n_target.py", "sim_par_1", '0.3'])
+# subprocess.Popen(["python", "run_simulations_AC_LR_Vaz_n_target.py", "sim_par_1", '0.7'])
+# subprocess.Popen(["python", "run_simulations_AC_LR_n_target.py", "sim_par_1", '0.3'])
 
 # subprocess.Popen(["python", "run_simulations_AC_RF_n_target.py", "sim_par_1", '0.25'])
 # subprocess.Popen(["python", "run_simulations_AC_RF_n_target.py", "sim_par_1", '0.75'])

@@ -57,6 +57,7 @@ def set_params(sim_scenario, pi_target):
         params = {
             'N': 100,
             "generation_function_tmp": generate_sample_Nstd_Nstd_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_Nstd_CC_rbf,
             "gen_params": {
                 "p": 5,
                 "beta": 1
@@ -70,6 +71,7 @@ def set_params(sim_scenario, pi_target):
         params = {
             'N': 100,
             "generation_function_tmp": generate_sample_Nstd_Nstd_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_Nstd_CC_rbf,
             "gen_params": {
                 "p": 5,
                 "beta": 0.5
@@ -83,12 +85,59 @@ def set_params(sim_scenario, pi_target):
         params = {
             'N': 100,
             "generation_function_tmp": generate_sample_Nstd_AR1_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_AR1_CC_rbf,
             "gen_params": {
                 "p": 5,
                 "beta": 1,
                 'rho': 0.5
             },
             "n_target_seq": [100, 200, 300, 400, 500],
+            "pi_target": pi_target,
+            "pi_target_name": str(pi_target).replace(".", "")
+        }
+
+    if sim_scenario == 'sim_par_7':
+        params = {
+            'N': 100,
+            "generation_function_tmp": generate_sample_Nstd_Nstd_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_Nstd_CC_rbf,
+            "gen_params": {
+                "p": 5,
+                "beta": 1
+            },
+            "n_source_seq": [100, 200, 300, 400, 500],
+            'n_target': 300,
+            "pi_target": pi_target,
+            "pi_target_name": str(pi_target).replace(".", "")
+        }
+
+    if sim_scenario == 'sim_par_8':
+        params = {
+            'N': 100,
+            "generation_function_tmp": generate_sample_Nstd_Nstd_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_Nstd_CC_rbf,
+            "gen_params": {
+                "p": 5,
+                "beta": 0.5
+            },
+            "n_source_seq": [100, 200, 300, 400, 500],
+            'n_target': 300,
+            "pi_target": pi_target,
+            "pi_target_name": str(pi_target).replace(".", "")
+        }
+
+    if sim_scenario == 'sim_par_9':
+        params = {
+            'N': 100,
+            "generation_function_tmp": generate_sample_Nstd_AR1_CC,
+            "generation_function_tmp_rbf": generate_sample_Nstd_AR1_CC_rbf,
+            "gen_params": {
+                "p": 5,
+                "beta": 1,
+                'rho': 0.5
+            },
+            "n_source_seq": [100, 200, 300, 400, 500],
+            'n_target': 300,
             "pi_target": pi_target,
             "pi_target_name": str(pi_target).replace(".", "")
         }
