@@ -21,8 +21,8 @@ df_results['pi_target'] = pi_target
 for n_source in n_source_seq:
     n_plus = int(n_source/2)
     n_minus = int(n_source/2)
-    df_results['n_plus'] = n_plus
-    df_results['n_minus'] = n_minus
+    df_results.loc[iter, 'n_plus'] = n_plus
+    df_results.loc[iter, 'n_minus'] = n_minus
     r_n = 1/n_plus + 1/n_minus + 1/n_target
     var = generation_function_tmp_rbf(**gen_params, n_plus=n_plus, n_minus=n_minus, 
                                            n_target=n_target, pi_target=pi_target, gamma=1/gen_params['p'])[0]

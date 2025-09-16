@@ -27,10 +27,10 @@ for i in tqdm(range(N)):
         n_plus = int(n_source/2)
         n_minus = int(n_source/2)
 
-        df_results_ipr['n_plus'] = n_plus
-        df_results_ipr['n_minus'] = n_minus
-        df_results_nrm['n_plus'] = n_plus
-        df_results_nrm['n_minus'] = n_minus
+        df_results_ipr.loc[iter, 'n_plus'] = n_plus
+        df_results_ipr.loc[iter, 'n_minus'] = n_minus
+        df_results_nrm.loc[iter, 'n_plus'] = n_plus
+        df_results_nrm.loc[iter, 'n_minus'] = n_minus
 
         p_source_plus, p_source_minus, p_target = generation_function_tmp(**gen_params,
                                                                           n_plus=n_plus, n_minus=n_minus, n_target=n_target, 
@@ -78,10 +78,10 @@ for i in tqdm(range(N)):
                                                                           pi_target=pi_target, seed=i)
         df_results_ipr.loc[iter, 'n_target'] = n_target
         df_results_nrm.loc[iter, 'n_target'] = n_target
-        df_results_ipr['n_plus'] = n_plus
-        df_results_ipr['n_minus'] = n_minus
-        df_results_nrm['n_plus'] = n_plus
-        df_results_nrm['n_minus'] = n_minus
+        df_results_ipr.loc[iter, 'n_plus'] = n_plus
+        df_results_ipr.loc[iter, 'n_minus'] = n_minus
+        df_results_nrm.loc[iter, 'n_plus'] = n_plus
+        df_results_nrm.loc[iter, 'n_minus'] = n_minus
         df_results_ipr.loc[iter, 'seed'] = i
         df_results_nrm.loc[iter, 'seed'] = i
 

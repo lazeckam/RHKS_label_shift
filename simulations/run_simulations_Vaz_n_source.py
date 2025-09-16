@@ -25,8 +25,8 @@ for i in tqdm(range(N)):
         n_minus = int(n_source/2)
 
 
-        df_results['n_plus'] = n_plus
-        df_results['n_minus'] = n_minus
+        df_results.loc[iter, 'n_plus'] = n_plus
+        df_results.loc[iter, 'n_minus'] = n_minus
 
         p_source_plus, p_source_minus, p_target = generation_function_tmp(**gen_params,
                                                                           n_plus=n_plus, n_minus=n_minus, n_target=n_target, 
