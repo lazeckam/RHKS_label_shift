@@ -281,36 +281,312 @@ class estimator_RHKS():
 
 
 class estimator_RHKS_rbf_gamma(estimator_RHKS):
-    def __init__(self, X_target, X_source_positive, X_source_negative, how='numerical'):
+    def __init__(self, X_target, X_source_positive, X_source_negative, 
+                 kernel='rbf', how='one_over_p', estimator='ipr', UorV_statistic='U'):
         
         self.X_target = X_target
         self.X_source_positive = X_source_positive
         self.X_source_negative = X_source_negative
         self.p = X_target.shape[1]
+
+        self.kernel = kernel
+        self.estimator = estimator
+        self.UorV_statistic = UorV_statistic
+
+        if how == 'one_over_p':
+            self.gamma_opt = 1/self.p
         if how == 'numerical':
             self.gamma_opt = self._get_gamma_numerical()
         if how == 'grid':
             self.gamma_opt = self._get_gamma_grid()
+        if how == 'bootstrap_var':
+            self.gamma_opt = self._get_gamma_bootstrap_var()
+        if how == 'bootstrap_mse':
+            self.gamma_opt = self._get_gamma_bootstrap_mse()
+        if how == 'distance':
+            self.gamma_opt = self._get_gamma_distance()
+        # if how == 'numerical_V':
+        #     self.gamma_opt = self._get_gamma_numerical_V()
+        # if how == 'grid_V':
+        #     self.gamma_opt = self._get_gamma_grid_V()
+        # if how == 'bootstrap_var_V':
+        #     self.gamma_opt = self._get_gamma_bootstrap_var_V()
+        # if how == 'bootstrap_mse_V':
+        #     self.gamma_opt = self._get_gamma_bootstrap_mse_V()
+        # if how == 'distance_V':
+        #     self.gamma_opt = self._get_gamma_distance_V()
+
         super().__init__(X_target, X_source_positive, X_source_negative, 
-                         UorV_statistic = 'U', kernel='rbf', kernel_params={'gamma': self.gamma_opt})
+                         UorV_statistic = UorV_statistic, kernel=kernel, kernel_params={'gamma': self.gamma_opt})
 
     def _function_gamma(self, gamma):
 
-        mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, kernel_params={'gamma': gamma})
+        mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, 
+                             kernel=self.kernel, kernel_params={'gamma': gamma},
+                             UorV_statistic=self.UorV_statistic)
 
-        mod.estimate_pi_ipr()
-        mod.compute_K2()
-        mod.compute_tau_plug_in()
-        mod.estimate_variance_plug_in()
+        mod.compute_basic_simulations()
 
         return mod.var_plug_in_n
     
+    # def _function_gamma_V(self, gamma):
+
+    #     mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, 
+    #                          kernel=self.kernel, kernel_params={'gamma': gamma},
+    #                          UorV_statistic='V')
+
+    #     mod.compute_basic_simulations()
+
+    #     return mod.var_plug_in_n
+    
+    # def _function_gamma_V(self, gamma):
+    #     return self._function_gamma(self, gamma, UorV_statistic='V')
+    
     def _get_gamma_numerical(self):
 
-        return minimize(self._function_gamma, x0=1/self.p, bounds=[(1e-5,1)], 
+        return minimize(self._function_gamma, x0=1/self.p, bounds=[(1e-5,2/self.p)], 
                         tol=1e-10)['x'][0]
     
+    # def _get_gamma_numerical_V(self):
+
+    #     return minimize(self._function_gamma_V, x0=1/self.p, bounds=[(1e-5,2/self.p)], 
+    #                     tol=1e-10)['x'][0]
+    
     def _get_gamma_grid(self):
+
+        gamma_seq = self._get_gamma_quantiles()
+
+        results_seq = np.array([self._function_gamma(gamma) for gamma in gamma_seq])
+
+        self.opt_values = {
+            'gamma': gamma_seq,
+            'values': results_seq
+        }
+
+        return gamma_seq[np.argmin(results_seq)]
+    
+
+    # def _get_gamma_grid_V(self):
+
+    #     gamma_seq = self._get_gamma_quantiles()
+
+    #     results_seq = np.array([self._function_gamma_V(gamma) for gamma in gamma_seq])
+
+    #     self.opt_values = {
+    #         'gamma': gamma_seq,
+    #         'values': results_seq
+    #     }
+
+    #     return gamma_seq[np.argmin(results_seq)]
+    
+    def _get_gamma_bootstrap_var(self, B=50):
+
+        gamma_seq = self._get_gamma_quantiles()
+
+        results_estimator_seq = np.zeros((B, 13))
+
+        for b in range(B):
+
+            indices_positive = np.random.choice(self.X_source_positive.shape[0], size=self.X_source_positive.shape[0], replace=True)
+            indices_negative = np.random.choice(self.X_source_negative.shape[0], size=self.X_source_negative.shape[0], replace=True)
+            indices_target = np.random.choice(self.X_target.shape[0], size=self.X_target.shape[0], replace=True)
+            X_source_positive_b = self.X_source_positive[indices_positive,:]
+            X_source_negative_b = self.X_source_negative[indices_negative,:]
+            X_target_b = self.X_target[indices_target,:]
+
+            for gamma_ind, gamma in enumerate(gamma_seq):
+                mod_tmp = estimator_RHKS(X_target_b, X_source_positive_b, X_source_negative_b, 
+                                         kernel=self.kernel, kernel_params={'gamma': gamma}, 
+                                         UorV_statistic=self.UorV_statistic)
+                mod_tmp.compute_basic_simulations()
+                if self.estimator == 'ipr':
+                    results_estimator_seq[b, gamma_ind] = mod_tmp.pi_ipr
+                if self.estimator == 'nrm':
+                    results_estimator_seq[b, gamma_ind] = mod_tmp.pi_nrm
+        
+        results_seq = np.var(results_estimator_seq, axis=0, ddof=1)
+            
+        self.opt_values = {
+            'gamma': gamma_seq,
+            'values': results_seq
+        }
+
+        return gamma_seq[np.argmin(results_seq)]
+    
+    # def _get_gamma_bootstrap_var_V(self, B=50):
+
+    #     gamma_seq = self._get_gamma_quantiles()
+
+    #     results_estimator_seq = np.zeros((B, 13))
+
+    #     for b in range(B):
+    #         indices_positive = np.random.choice(self.X_source_positive.shape[0], size=self.X_source_positive.shape[0], replace=True)
+    #         indices_negative = np.random.choice(self.X_source_negative.shape[0], size=self.X_source_negative.shape[0], replace=True)
+    #         indices_target = np.random.choice(self.X_target.shape[0], size=self.X_target.shape[0], replace=True)
+    #         X_source_positive_b = self.X_source_positive[indices_positive,:]
+    #         X_source_negative_b = self.X_source_negative[indices_negative,:]
+    #         X_target_b = self.X_target[indices_target,:]
+    #         for gamma_ind, gamma in enumerate(gamma_seq):
+    #             mod_tmp = estimator_RHKS(X_target_b, X_source_positive_b, X_source_negative_b, 
+    #                                      kernel=self.kernel, kernel_params={'gamma': gamma},
+    #                                      UorV_statistic='V')
+    #             mod_tmp.compute_basic_simulations()
+    #             if self.estimator == 'ipr':
+    #                 results_estimator_seq[b, gamma_ind] = mod_tmp.pi_ipr
+    #             if self.estimator == 'nrm':
+    #                 results_estimator_seq[b, gamma_ind] = mod_tmp.pi_nrm
+        
+    #     results_seq = np.var(results_estimator_seq, axis=0, ddof=1)
+            
+    #     self.opt_values = {
+    #         'gamma': gamma_seq,
+    #         'values': results_seq
+    #     }
+
+    #     return gamma_seq[np.argmin(results_seq)]
+
+    def _get_gamma_bootstrap_mse(self, B=50):
+
+        gamma_seq = self._get_gamma_quantiles()
+
+        results_estimator_seq = np.zeros((B, 13))
+
+        for b in range(B):
+            indices_positive = np.random.choice(self.X_source_positive.shape[0], size=self.X_source_positive.shape[0], replace=True)
+            indices_negative = np.random.choice(self.X_source_negative.shape[0], size=self.X_source_negative.shape[0], replace=True)
+            indices_target = np.random.choice(self.X_target.shape[0], size=self.X_target.shape[0], replace=True)
+            X_source_positive_b = self.X_source_positive[indices_positive,:]
+            X_source_negative_b = self.X_source_negative[indices_negative,:]
+            X_target_b = self.X_target[indices_target,:]
+            for gamma_ind, gamma in enumerate(gamma_seq):
+                mod_tmp = estimator_RHKS(X_target_b, X_source_positive_b, X_source_negative_b, 
+                                         kernel=self.kernel, kernel_params={'gamma': gamma},
+                                         UorV_statistic=self.UorV_statistic)
+                mod_tmp.compute_basic_simulations()
+                if self.estimator == 'ipr':
+                    results_estimator_seq[b, gamma_ind] = mod_tmp.pi_ipr
+                if self.estimator == 'nrm':
+                    results_estimator_seq[b, gamma_ind] = mod_tmp.pi_nrm
+
+        results_estimator_n_seq = np.zeros(13)
+
+        for gamma_ind, gamma in enumerate(gamma_seq):
+            mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, 
+                                kernel=self.kernel, kernel_params={'gamma': gamma},
+                                UorV_statistic=self.UorV_statistic)
+            mod.compute_basic_simulations()
+            if self.estimator == 'ipr':
+                results_estimator_n_seq[gamma_ind] = mod.pi_ipr
+            if self.estimator == 'nrm':
+                results_estimator_n_seq[gamma_ind] = mod.pi_nrm
+        
+        results_seq = np.mean((results_estimator_seq - results_estimator_n_seq)**2, axis=0)
+            
+        self.opt_values = {
+            'gamma': gamma_seq,
+            'values': results_seq
+        }
+
+        return gamma_seq[np.argmin(results_seq)]
+    
+    # def _get_gamma_bootstrap_mse_V(self, B=50):
+
+    #     gamma_seq = self._get_gamma_quantiles()
+
+    #     results_estimator_seq = np.zeros((B, 13))
+
+    #     for b in range(B):
+    #         indices_positive = np.random.choice(self.X_source_positive.shape[0], size=self.X_source_positive.shape[0], replace=True)
+    #         indices_negative = np.random.choice(self.X_source_negative.shape[0], size=self.X_source_negative.shape[0], replace=True)
+    #         indices_target = np.random.choice(self.X_target.shape[0], size=self.X_target.shape[0], replace=True)
+    #         X_source_positive_b = self.X_source_positive[indices_positive,:]
+    #         X_source_negative_b = self.X_source_negative[indices_negative,:]
+    #         X_target_b = self.X_target[indices_target,:]
+    #         for gamma_ind, gamma in enumerate(gamma_seq):
+    #             mod_tmp = estimator_RHKS(X_target_b, X_source_positive_b, X_source_negative_b, 
+    #                                      kernel=self.kernel, kernel_params={'gamma': gamma},
+    #                                      UorV_statistic='V')
+    #             mod_tmp.compute_basic_simulations()
+    #             if self.estimator == 'ipr':
+    #                 results_estimator_seq[b, gamma_ind] = mod_tmp.pi_ipr
+    #             if self.estimator == 'nrm':
+    #                 results_estimator_seq[b, gamma_ind] = mod_tmp.pi_nrm
+
+    #     results_estimator_n_seq = np.zeros(13)
+
+    #     for gamma_ind, gamma in enumerate(gamma_seq):
+    #         mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, 
+    #                             kernel=self.kernel, kernel_params={'gamma': gamma},
+    #                             UorV_statistic='V')
+    #         mod.compute_basic_simulations()
+    #         if self.estimator == 'ipr':
+    #             results_estimator_n_seq[gamma_ind] = mod.pi_ipr
+    #         if self.estimator == 'nrm':
+    #             results_estimator_n_seq[gamma_ind] = mod.pi_nrm
+        
+    #     results_seq = np.mean((results_estimator_seq - results_estimator_n_seq)**2, axis=0)
+            
+    #     self.opt_values = {
+    #         'gamma': gamma_seq,
+    #         'values': results_seq
+    #     }
+
+    #     return gamma_seq[np.argmin(results_seq)]
+    
+    def _get_gamma_distance(self):
+        gamma_seq = self._get_gamma_quantiles()
+
+        results_seq = np.zeros(13)
+
+        for gamma_ind, gamma in enumerate(gamma_seq):
+            mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, 
+                                kernel=self.kernel, kernel_params={'gamma': gamma},
+                                UorV_statistic=self.UorV_statistic)
+            mod.compute_basic_simulations()
+
+            if self.estimator == 'ipr':
+                estimator_tmp = mod.pi_ipr
+            if self.estimator == 'nrm':
+                estimator_tmp = mod.pi_nrm
+
+            results_seq[gamma_ind] = (1 - estimator_tmp)*mod.D_target_source_negative \
+                + estimator_tmp*(estimator_tmp - 1)*mod.D_source_positive_source_negative \
+                + estimator_tmp*mod.D_target_source_positive
+            
+        self.opt_values = {
+            'gamma': gamma_seq,
+            'values': results_seq
+        }
+
+        return gamma_seq[np.argmin(results_seq)]
+    
+    # def _get_gamma_distance_V(self):
+    #     gamma_seq = self._get_gamma_quantiles()
+
+    #     results_seq = np.zeros(13)
+
+    #     for gamma_ind, gamma in enumerate(gamma_seq):
+    #         mod = estimator_RHKS(self.X_target, self.X_source_positive, self.X_source_negative, 
+    #                             kernel=self.kernel, kernel_params={'gamma': gamma}, UorV_statistic='V')
+    #         mod.compute_basic_simulations()
+
+    #         if self.estimator == 'ipr':
+    #             estimator_tmp = mod.pi_ipr
+    #         if self.estimator == 'nrm':
+    #             estimator_tmp = mod.pi_nrm
+
+    #         results_seq[gamma_ind] = (1 - estimator_tmp)*mod.D_target_source_negative \
+    #             + estimator_tmp*(estimator_tmp - 1)*mod.D_source_positive_source_negative \
+    #             + estimator_tmp*mod.D_target_source_positive
+            
+    #     self.opt_values = {
+    #         'gamma': gamma_seq,
+    #         'values': results_seq
+    #     }
+
+    #     return gamma_seq[np.argmin(results_seq)]
+        
+    def _get_gamma_quantiles(self):
 
         p_source = np.vstack((self.X_source_positive, self.X_source_negative))
 
@@ -319,8 +595,7 @@ class estimator_RHKS_rbf_gamma(estimator_RHKS):
             p_source = p_source[p_source_ind,:]
         
         dist2 = pdist(p_source)**2
-        gamma_seq = np.quantile(1/dist2, np.array([0.01,0.015,0.02,0.025,0.05,0.1,0.2,0.25,0.5,0.75,0.9,0.95,0.99]))
+        gamma_seq = np.quantile(1/(2*dist2), np.array([0.01,0.015,0.02,0.025,0.05,0.1,0.2,0.25,0.5,0.75,0.9,0.95,0.99]))
 
-        results_seq = np.array([self._function_gamma(gamma) for gamma in gamma_seq])
-
-        return gamma_seq[np.argmin(results_seq)]
+        return gamma_seq
+        

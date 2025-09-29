@@ -3,8 +3,10 @@ import scipy as scp
 import pandas as pd
 from tqdm import tqdm
 from copy import copy
+import sys
 from rbf_kernel import *
-from estimators.estimators_RKHS import *
+sys.path.append("../estimators")
+from estimators_RKHS import *
 
 N_max = 5000
 
@@ -30,6 +32,41 @@ def generate_sample_normal_distribution_CC(mu_plus, Sigma_plus, mu_minus, Sigma_
     p_target_minus = np.random.multivariate_normal(mean=mu_minus, cov=Sigma_minus, size=N_max)[:n_target_minus,:]
     p_target = np.vstack((p_target_plus, p_target_minus))
 
+    return p_plus, p_minus, p_target
+
+def generate_sample_tstudent_distribution_CC(mu_plus, mu_minus, df,
+                                             n_plus, n_minus, n_target, pi_target, seed):
+    """Generate sample"""
+
+    np.random.seed(int(seed))
+    
+    n_target_plus = np.random.binomial(n=n_target, p=pi_target)
+    n_target_minus = n_target - n_target_plus
+
+    p_plus = np.random.standard_t(df=df, size=(N_max, mu_plus.shape[0]))[:n_plus,:] + mu_plus
+    p_minus = np.random.standard_t(df=df, size=(N_max, mu_minus.shape[0]))[:n_minus,:] + mu_minus
+
+    p_target_plus = np.random.standard_t(df=df, size=(N_max, mu_plus.shape[0]))[:n_target_plus,:] + mu_plus
+    p_target_minus = np.random.standard_t(df=df, size=(N_max, mu_minus.shape[0]))[:n_target_minus,:] + mu_minus
+    p_target = np.vstack((p_target_plus, p_target_minus))
+
+    return p_plus, p_minus, p_target
+
+def generate_sample_Cauchy_Cauchy_CC(p, beta, 
+                                     n_plus, n_minus, n_target, pi_target, seed):
+    
+    
+    p = int(p)
+    n_plus = int(n_plus)
+    n_minus = int(n_minus)
+    n_target = int(n_target)
+    
+    mu_plus = np.zeros(p)
+    mu_minus = beta*np.ones(p)
+    
+    p_plus, p_minus, p_target = generate_sample_tstudent_distribution_CC(mu_plus, mu_minus, 1,
+                                                                         n_plus, n_minus, n_target, pi_target, seed)
+    
     return p_plus, p_minus, p_target
 
 def generate_sample_Nstd_AR1_CC(p, beta, rho,
