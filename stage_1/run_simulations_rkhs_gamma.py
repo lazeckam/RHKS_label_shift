@@ -30,18 +30,18 @@ UorV_type = ['U', 'V', 'U', 'V',
              'U', 'U',
              'U', 'V']
 
-method_names =  method_names+['numerical', 'grid', #method_names+
-                'bootstrap_var', 'bootstrap_mse']
+method_names = ['numerical', 'grid',
+                'bootstrap_var', 'bootstrap_mse'] +  method_names
 
-estimator_type = estimator_type+['ipr', 'ipr', #estimator_type+
-                  'ipr', 'ipr']
+estimator_type = ['ipr', 'ipr',
+                  'ipr', 'ipr'] + estimator_type
 
-UorV_type = UorV_type+['V', 'V', 'V', 'V'] #UorV_type+
+UorV_type = ['V', 'V', 'V', 'V'] + UorV_type
 kernel = 'rbf'
 
 # results = []
 
-for i in tqdm(range(87, N)):
+for i in tqdm(range(87)):
     for j, n_target in enumerate(n_target_seq):
 
         n_plus = n_plus_seq[j]
