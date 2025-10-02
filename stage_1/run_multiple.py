@@ -1,18 +1,16 @@
 import subprocess
 
 
-# for i in range(9):
+# for i in range(6,9):
 #     subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1), '0.25'])
 #     print('computing 0.25 '+str(i))
 
-# for i in range(6, 9):
-#     subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1), '0.75'])
-#     print('computing 0.75 '+str(i))
+for i in range(6,9):
+    subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1), '0.75'])
+    print('computing 0.75 '+str(i))
 
-# laplacian 0.75 1-6
 
-# simp par 1 0.75 kill 
-# laplace 0.25 dla 4-6 puszczony 2 raxy
+# laplace 6-9 0.75
 
 # for i in range(3,6):
 #     subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1)+"-p-10", '0.25'])
@@ -38,7 +36,7 @@ import subprocess
 #     subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1)+"-Cauchy", '0.75'])
 #     print('computing 0.75 '+str(i))
 
-# we need to run this:
-for i in [0,3,6]:#[0,1,3,4,6,7]:
-    subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1)+"-Cauchy", '0.25'])
-    print('computing 0.25 '+str(i))
+# # we need to run this:
+# for i in [0,3,6]:#[0,1,3,4,6,7]:
+#     subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1)+"-Cauchy", '0.25'])
+#     print('computing 0.25 '+str(i))

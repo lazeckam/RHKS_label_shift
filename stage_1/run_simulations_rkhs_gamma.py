@@ -15,33 +15,47 @@ pi_target = float(sys.argv[2])
 params = set_params(sim_scenario, pi_target)
 locals().update(params)
 
-method_names = ['one_over_p', 'one_over_p', 'one_over_p', 'one_over_p',
+# method_names = ['one_over_p', 'one_over_p', 'one_over_p', 'one_over_p',
+#                 'numerical', 'grid', 
+#                 'bootstrap_var', 'bootstrap_mse',
+#                 'distance', 'distance']
+
+# estimator_type = ['nrm', 'nrm', 'ipr', 'ipr',
+#                   'ipr', 'ipr',
+#                   'ipr', 'ipr',
+#                   'ipr', 'ipr']
+
+# UorV_type = ['U', 'V', 'U', 'V',
+#              'U', 'U',
+#              'U', 'U',
+#              'U', 'V']
+
+# method_names = ['numerical', 'grid',
+#                 'bootstrap_var', 'bootstrap_mse'] +  method_names
+
+# estimator_type = ['ipr', 'ipr',
+#                   'ipr', 'ipr'] + estimator_type
+
+# UorV_type = ['V', 'V', 'V', 'V'] + UorV_type
+
+method_names = ['numerical', 'grid', 
+                'bootstrap_var', 'bootstrap_mse',
+                'distance', 'distance',
                 'numerical', 'grid', 
                 'bootstrap_var', 'bootstrap_mse',
                 'distance', 'distance']
 
-estimator_type = ['nrm', 'nrm', 'ipr', 'ipr',
-                  'ipr', 'ipr',
-                  'ipr', 'ipr',
-                  'ipr', 'ipr']
+estimator_type = ['nrm', 'nrm', 'nrm', 'nrm','nrm', 'nrm',
+                  'nrm', 'nrm', 'nrm', 'nrm','nrm', 'nrm']
 
-UorV_type = ['U', 'V', 'U', 'V',
-             'U', 'U',
-             'U', 'U',
-             'U', 'V']
+UorV_type = ['U', 'U', 'U', 'U', 'U', 'U',
+             'V', 'V', 'V', 'V', 'V', 'V',]
 
-method_names = ['numerical', 'grid',
-                'bootstrap_var', 'bootstrap_mse'] +  method_names
-
-estimator_type = ['ipr', 'ipr',
-                  'ipr', 'ipr'] + estimator_type
-
-UorV_type = ['V', 'V', 'V', 'V'] + UorV_type
-kernel = 'rbf'
+kernel = 'laplacian'
 
 # results = []
 
-for i in tqdm(range(87)):
+for i in tqdm(range(100)):
     for j, n_target in enumerate(n_target_seq):
 
         n_plus = n_plus_seq[j]
