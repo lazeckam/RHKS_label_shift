@@ -14,6 +14,21 @@ def set_params(sim_scenario, pi_target):
         if list_of_strings[1] == 'Cauchy':
            generation_function_change = generate_sample_Cauchy_Cauchy_CC,
 
+    # if sim_scenario == 'sim_par_1':
+    #     params = {
+    #         'N': 100,
+    #         "generation_function_tmp": generate_sample_Nstd_Nstd_CC,
+    #         "generation_function_tmp_rbf": generate_sample_Nstd_Nstd_CC_rbf,
+    #         "gen_params": {
+    #             "p": 5,
+    #             "beta": 1
+    #         },
+    #         "n_target_seq": [100, 200, 300, 400, 500, 1000, 1500],
+    #         "pi_target": pi_target,
+    #         "pi_target_name": str(pi_target).replace(".", ""),
+    #         "n_plus_seq": [150]*7,
+    #         "n_minus_seq": [150]*7
+    #     }
     if sim_scenario == 'sim_par_1':
         params = {
             'N': 100,
@@ -23,11 +38,11 @@ def set_params(sim_scenario, pi_target):
                 "p": 5,
                 "beta": 1
             },
-            "n_target_seq": [100, 200, 300, 400, 500, 1000, 1500],
+            "n_target_seq": [100, 200, 300, 400, 500],
             "pi_target": pi_target,
             "pi_target_name": str(pi_target).replace(".", ""),
-            "n_plus_seq": [150]*7,
-            "n_minus_seq": [150]*7
+            "n_plus_seq": [150]*5,
+            "n_minus_seq": [150]*5
         }
 
     if sim_scenario == 'sim_par_2':
