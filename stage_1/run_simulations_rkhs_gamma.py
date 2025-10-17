@@ -54,9 +54,9 @@ UorV_type = ['U', 'U', 'U', 'U', 'U', 'U',
              'V', 'V', 'V', 'V', 'V', 'V']
 UorV_type = UorV_type + UorV_type
 
-kernel = 'laplacian'
+# kernel = 'laplacian'
 
-for kernel in ['rbf', 'laplacian']:
+for kernel in ['laplacian']: #, 'rbf'
 
     for i in tqdm(range(100)):
         for j, n_target in enumerate(n_target_seq):

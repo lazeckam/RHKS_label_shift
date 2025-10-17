@@ -70,12 +70,19 @@ import subprocess
 # print('computing grid p=20 0.75 ')
 
 # # 15:
-subprocess.run(["python", "run_simulations_rkhs_gamma_grid.py", "sim_par_4-Cauchy", '0.75'])
-print('computing grid cauchy 75')
+# subprocess.run(["python", "run_simulations_rkhs_gamma_grid.py", "sim_par_4-Cauchy", '0.75'])
+# print('computing grid cauchy 75')
 
 
-
-
+# RUN 1 for 4-6 again for rbf and laplace so it's faster
+# screens: 2,6
+# 6 for laplacian and 0.75 missing - run later 8
+# for i in range(3,6):
+#     subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1), '0.25'])
+#     print('computing 0.25 '+str(i))
+for i in range(5,6):
+    subprocess.Popen(["python", "run_simulations_rkhs_gamma.py", "sim_par_"+str(i+1), '0.75'])
+    print('computing 0.75 '+str(i))
 
 
 
